@@ -1,7 +1,7 @@
 {
   "name": "@vitejs/devtools-rolldown",
   "type": "module",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "description": "DevTools for Rolldown",
   "author": "VoidZero Inc.",
   "license": "MIT",
@@ -46,6 +46,7 @@
     "diff": "catalog:deps",
     "get-port-please": "catalog:deps",
     "h3": "catalog:deps",
+    "logs-sdk": "catalog:deps",
     "mlly": "catalog:deps",
     "mrmime": "catalog:deps",
     "ohash": "catalog:deps",

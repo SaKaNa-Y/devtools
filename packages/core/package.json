@@ -1,7 +1,7 @@
 {
   "name": "@vitejs/devtools",
   "type": "module",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "description": "Vite DevTools",
   "author": "VoidZero Inc.",
   "license": "MIT",
@@ -63,6 +63,7 @@
     "h3": "catalog:deps",
     "immer": "catalog:inlined",
     "launch-editor": "catalog:deps",
+    "logs-sdk": "catalog:deps",
     "mlly": "catalog:deps",
     "obug": "catalog:deps",
     "open": "catalog:deps",
