@@ -28,7 +28,7 @@ export function DevToolsViteUIPlugin(): PluginWithDevTools {
         ctx.docks.register({
           id: 'vite',
           title: 'Vite',
-          icon: 'material-icon-theme:vite',
+          icon: `${VITE_DEVTOOLS_BASE}favicon.svg`,
           groupId: DEVTOOLS_VITEPLUS_GROUP_ID,
           type: 'iframe',
           url: VITE_DEVTOOLS_BASE,

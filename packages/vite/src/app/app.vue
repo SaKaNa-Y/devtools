@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PanelSideNav from '@vitejs/devtools-ui/components/PanelSideNav.vue'
 import { useSideNav } from '@vitejs/devtools-ui/composables/nav'
-import { useHead } from '#app/composables/head'
+import { useSeoMeta } from '#app/composables/head'
 import { connect, rpcConnectionState } from './composables/rpc'
 import 'floating-vue/dist/style.css'
 import './styles/cm.css'
@@ -9,7 +9,7 @@ import './styles/splitpanes.css'
 import './styles/global.css'
 import '@vitejs/devtools-ui/composables/dark'
 
-useHead({
+useSeoMeta({
   title: 'Vite DevTools',
 })
 
