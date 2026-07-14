@@ -2,16 +2,25 @@ import type { PluginWithDevTools } from '@vitejs/devtools-kit'
 import type { SharedState } from '@vitejs/devtools-kit/utils/shared-state'
 import type { ResolvedConfig, ResolveFn } from 'vite'
 import type { ViteInspectModuleUpdatedState } from '../rpc'
+import { rmSync } from 'node:fs'
+import { join } from 'node:path'
 import { debounce } from 'perfect-debounce'
 import { diagnostics } from '../diagnostics'
 import { inspectRpcFunctions, VITE_INSPECT_MODULE_UPDATED_STATE_KEY, viteRpcFunctions } from '../rpc'
 import { setViteInspectContext, ViteInspectContext } from './context'
 import { hijackPlugin } from './hijack'
-import { setupEnvironmentInvalidation, setupMiddlewarePerformance } from './server'
+import {
+  isTransformRequestStale,
+  setupEnvironmentInvalidation,
+  setupMiddlewarePerformance,
+  trackTransformRequestId,
+} from './server'
 
 export function DevToolsViteInspect(): PluginWithDevTools {
-  let resolvedConfig: ResolvedConfig | undefined
   let inspectContext: ViteInspectContext | undefined
+  let inspectContextPromise: Promise<ViteInspectContext> | undefined
+  let closingInspectContext: Promise<void> | undefined
+  let inspectStorageDir: string | undefined
   let inspectModuleUpdatedState: SharedState<ViteInspectModuleUpdatedState> | undefined
 
   function notifyInspectModuleUpdated(ids: string[] | null = null) {
@@ -22,11 +31,53 @@ export function DevToolsViteInspect(): PluginWithDevTools {
     })
   }
 
-  function getInspectContext(config: ResolvedConfig): ViteInspectContext | undefined {
+  async function createInspectContext(config: ResolvedConfig): Promise<ViteInspectContext> {
+    const cacheDir = config.cacheDir || join(config.root, 'node_modules/.vite')
+    const storageDir = join(cacheDir, 'devtools', 'inspect')
+    inspectStorageDir = storageDir
+    removeInspectStorage()
+
+    try {
+      const ctx = await ViteInspectContext.create({
+        filename: join(storageDir, 'payloads.bin'),
+      })
+      inspectContext = ctx
+      return ctx
+    }
+    catch (error) {
+      removeInspectStorage()
+      throw error
+    }
+  }
+
+  function ensureInspectContext(config: ResolvedConfig): Promise<ViteInspectContext | undefined> {
     if (config.command !== 'serve')
-      return undefined
-    inspectContext ||= new ViteInspectContext()
-    return inspectContext
+      return Promise.resolve(undefined)
+
+    inspectContextPromise ??= createInspectContext(config)
+    return inspectContextPromise
+  }
+
+  async function closeInspectContext(): Promise<void> {
+    const ctx = inspectContext ?? await inspectContextPromise
+    if (!ctx)
+      return
+
+    closingInspectContext ??= (async () => {
+      await ctx.close()
+    })()
+    await closingInspectContext
+  }
+
+  function removeInspectStorage(): void {
+    if (inspectStorageDir)
+      rmSync(inspectStorageDir, { recursive: true, force: true })
+  }
+
+  async function resolveInspectContext(): Promise<ViteInspectContext | undefined> {
+    if (inspectContext)
+      return inspectContext
+    return inspectContextPromise
   }
 
   return {
@@ -40,8 +91,10 @@ export function DevToolsViteInspect(): PluginWithDevTools {
         for (const fn of viteRpcFunctions)
           ctx.rpc.register(fn as any)
 
-        if (inspectContext) {
-          setViteInspectContext(ctx, inspectContext)
+        const currentInspectContext = await resolveInspectContext()
+
+        if (currentInspectContext) {
+          setViteInspectContext(ctx, currentInspectContext)
           for (const fn of inspectRpcFunctions)
             ctx.rpc.register(fn as any)
 
@@ -67,9 +120,8 @@ export function DevToolsViteInspect(): PluginWithDevTools {
       },
     },
 
-    configResolved(config) {
-      resolvedConfig = config
-      const ctx = getInspectContext(config)
+    async configResolved(config) {
+      const ctx = await ensureInspectContext(config)
       if (!ctx)
         return
 
@@ -86,11 +138,12 @@ export function DevToolsViteInspect(): PluginWithDevTools {
         const resolver = createResolver.apply(this, args)
         return async (...resolverArgs: Parameters<ResolveFn>) => {
           const [id, , aliasOnly, ssr] = resolverArgs
+          const transformRequest = trackTransformRequestId(id)
           const start = Date.now()
           const result = await resolver(...resolverArgs)
           const end = Date.now()
 
-          if (result && result !== id) {
+          if (result && result !== id && !isTransformRequestStale(transformRequest)) {
             const pluginName = aliasOnly ? 'alias' : 'vite:resolve (+alias)'
             const envName = ssr ? 'ssr' : 'client'
             vite.environments.get(envName)?.recordResolveId(id, {
@@ -107,9 +160,19 @@ export function DevToolsViteInspect(): PluginWithDevTools {
     },
 
     configureServer(server) {
-      const ctx = resolvedConfig ? getInspectContext(resolvedConfig) : inspectContext
+      const ctx = inspectContext
       if (!ctx)
         return
+
+      const closeServer = server.close.bind(server)
+      server.close = async () => {
+        try {
+          await closeServer()
+        }
+        finally {
+          await closeInspectContext()
+        }
+      }
 
       const vite = ctx.getViteContext(server.config)
       Object.values(server.environments).forEach(env => vite.getEnvContext(env))
@@ -118,14 +181,6 @@ export function DevToolsViteInspect(): PluginWithDevTools {
       return () => {
         setupMiddlewarePerformance(vite, server.middlewares.stack)
       }
-    },
-
-    load: {
-      order: 'pre',
-      handler(id) {
-        inspectContext?.getEnvContext(this.environment)?.invalidate(id)
-        return null
-      },
     },
 
     hotUpdate({ modules }) {

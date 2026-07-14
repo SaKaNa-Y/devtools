@@ -20,7 +20,6 @@ async function createContext(command: 'serve' | 'build') {
   const config = createConfig(plugin, command)
 
   await (plugin.configResolved as (config: ResolvedConfig) => void | Promise<void>)(config)
-
   return createDevToolsContext(config)
 }
 
