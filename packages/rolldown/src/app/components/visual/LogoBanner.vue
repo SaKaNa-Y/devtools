@@ -6,7 +6,7 @@ const theme = computed(() => isDark.value ? 'white' : '#08060E')
 </script>
 
 <template>
-  <div class="flex gap-2 group" w140 p4 relative>
+  <div class="flex gap-2 group" h-20 p4 relative>
     <div op10 group-hover="op100" transition duration-800 class="absolute -bottom-[10px] -left-[20px] w-[80px] h-[80px] bg-linear-to-b from-[#ff4100] to-transparent blur-[30px]" />
     <div op10 group-hover="op100" transition duration-800 class="absolute -top-[10px] left-300px w-[80px] h-[80px] bg-[linear-gradient(270deg,_#ff00b3,_#ff00b3cc_60%,_#ff4100cc,_#ff410000)] blur-[30px]" />
     <svg width="1123" height="47" viewBox="0 0 1123 47" fill="none" xmlns="http://www.w3.org/2000/svg">
