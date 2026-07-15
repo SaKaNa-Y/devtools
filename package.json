@@ -71,6 +71,8 @@
     "nano-staged": "catalog:devtools",
     "nostics": "catalog:deps",
     "nuxt": "catalog:build",
+    "oxfmt": "catalog:devtools",
+    "oxlint": "catalog:devtools",
     "p-limit": "catalog:deps",
     "pathe": "catalog:deps",
     "simple-git-hooks": "catalog:devtools",
