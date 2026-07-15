@@ -13,6 +13,7 @@ export default antfu({
     // oxlint/oxfmt style and is linted by its own toolchain, so it stays out of
     // the repo-wide ESLint run.
     'packages/oxc',
+    '!packages/oxc/package.json',
   ],
 })
   .append(nuxt())

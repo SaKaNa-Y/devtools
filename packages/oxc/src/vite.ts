@@ -1,6 +1,9 @@
 import type { PluginWithDevTools } from '@vitejs/devtools-kit'
 import { rpcFunctions } from './node/rpc'
-import { clientPublicDir } from './dirs'
+import { clientPublicDir } from './dirs'  
+
+const DEVTOOLS_VITEPLUS_GROUP_ID = '~viteplus'
+const OXC_DEVTOOLS_BASE = '/__devtools-oxc/'
 
 export function DevToolsOxc(): PluginWithDevTools {
   return {
@@ -11,14 +14,15 @@ export function DevToolsOxc(): PluginWithDevTools {
           ctx.rpc.register(fn as any)
         }
 
-        ctx.views.hostStatic('/.oxc-inspector/', clientPublicDir)
+        ctx.views.hostStatic(OXC_DEVTOOLS_BASE, clientPublicDir)
 
         ctx.docks.register({
-          id: 'oxc-inspector',
-          title: 'Oxc Inspector',
-          icon: 'https://viteplus.dev/projects/oxc.svg',
+          id: 'oxc',
+          title: 'Oxc',
+          icon: OXC_DEVTOOLS_BASE + 'favicon.svg',
           type: 'iframe',
-          url: '/.oxc-inspector/',
+          url: OXC_DEVTOOLS_BASE,
+          groupId: DEVTOOLS_VITEPLUS_GROUP_ID,
         })
       },
     },

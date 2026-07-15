@@ -32,7 +32,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsdown",
+    "build": "pnpm build:cli && pnpm build:client",
+    "build:cli": "tsdown",
     "build:client": "pnpm -C client run build",
     "dev": "pnpm -C client dev",
     "lint": "oxlint && oxfmt --check",
@@ -54,10 +55,32 @@
     "tinyexec": "catalog:deps"
   },
   "devDependencies": {
+    "@codemirror/lang-json": "catalog:frontend",
+    "@humanwhocodes/momoa": "catalog:frontend",
+    "@nuxt/kit": "catalog:build",
+    "@nuxt/ui": "catalog:frontend",
+    "@shikijs/langs": "catalog:frontend",
+    "@shikijs/themes": "catalog:frontend",
+    "@types/picomatch": "catalog:types",
+    "@vitejs/devtools": "workspace:*",
+    "@vitejs/devtools-kit": "workspace:*",
+    "@vueuse/core": "catalog:frontend",
+    "@vueuse/nuxt": "catalog:build",
+    "codemirror": "catalog:frontend",
+    "codemirror-theme-vitesse": "catalog:frontend",
+    "devframe": "catalog:deps",
+    "nuxt": "catalog:build",
     "oxfmt": "catalog:devtools",
     "oxlint": "catalog:devtools",
+    "pathe": "catalog:deps",
+    "picomatch": "catalog:frontend",
+    "shiki": "catalog:frontend",
+    "tailwindcss": "catalog:build",
     "tsdown": "catalog:build",
     "tsx": "catalog:build",
-    "typescript": "catalog:devtools"
+    "typescript": "catalog:devtools",
+    "vite": "catalog:build",
+    "vue": "catalog:deps",
+    "vue-router": "catalog:frontend"
   }
 }

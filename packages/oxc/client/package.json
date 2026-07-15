@@ -1,7 +1,6 @@
 {
   "name": "client",
   "type": "module",
-  "version": "0.0.1-beta.9",
   "private": true,
   "scripts": {
     "build": "nuxt build",
@@ -10,38 +9,5 @@
     "preview": "nuxt preview",
     "prepare": "nuxt prepare",
     "prepack": "pnpm build"
-  },
-  "devDependencies": {
-    "@codemirror/lang-json": "catalog:",
-    "@iconify-json/codicon": "catalog:",
-    "@iconify-json/lucide": "catalog:",
-    "@iconify-json/ph": "catalog:",
-    "@iconify-json/radix-icons": "catalog:",
-    "@iconify-json/twemoji": "catalog:",
-    "@iconify-json/vscode-icons": "catalog:",
-    "@nuxt/kit": "catalog:",
-    "@nuxt/ui": "catalog:",
-    "@shikijs/langs": "catalog:",
-    "@shikijs/themes": "catalog:",
-    "@types/picomatch": "catalog:",
-    "@vitejs/devtools": "catalog:",
-    "@vitejs/devtools-kit": "catalog:",
-    "@vueuse/core": "catalog:",
-    "@vueuse/nuxt": "catalog:",
-    "@vitejs/devtools-oxc": "workspace:*",
-    "codemirror": "catalog:",
-    "codemirror-theme-vitesse": "catalog:",
-    "devframe": "catalog:deps",
-    "nuxt": "catalog:",
-    "oxlint": "catalog:",
-    "pathe": "catalog:",
-    "picomatch": "catalog:",
-    "shiki": "catalog:",
-    "tailwindcss": "catalog:",
-    "vue": "catalog:",
-    "vue-router": "catalog:"
-  },
-  "dependencies": {
-    "@humanwhocodes/momoa": "catalog:"
   }
 }

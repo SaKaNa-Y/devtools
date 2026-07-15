@@ -88,7 +88,7 @@
     "unrun": "catalog:build",
     "vite": "catalog:build",
     "vue": "catalog:deps",
-    "vue-router": "catalog:playground",
+    "vue-router": "catalog:frontend",
     "vue-tsc": "catalog:devtools"
   },
   "inlinedDependencies": {
