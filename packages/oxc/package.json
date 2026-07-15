@@ -32,15 +32,13 @@
     "dist"
   ],
   "scripts": {
-    "dev": "pnpm dev:client",
-    "dev:client": "pnpm -C client dev",
     "build": "tsdown && pnpm build:client",
     "build:client": "pnpm -C client run build",
+    "dev": "pnpm -C client dev",
     "lint": "oxlint && oxfmt --check",
     "lint:fix": "oxlint --fix && oxfmt",
-    "prepublishOnly": "pnpm build",
     "play": "pnpm -C playground dev",
-    "release": "bumpp -r",
+    "prepack": "pnpm build",
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
@@ -57,21 +55,10 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "bumpp": "catalog:",
-    "lint-staged": "catalog:",
     "oxfmt": "catalog:",
     "oxlint": "catalog:",
-    "simple-git-hooks": "catalog:",
     "tsdown": "catalog:",
     "tsx": "catalog:",
     "typescript": "catalog:"
-  },
-  "lint-staged": {
-    "*.{js,ts,mjs,cjs,vue}": [
-      "pnpm oxlint --fix"
-    ],
-    "*.{js,ts,mjs,cjs,vue,json,yml,md,html,css}": [
-      "pnpm oxfmt"
-    ]
   }
 }
