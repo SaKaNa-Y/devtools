@@ -824,15 +824,9 @@ importers:
       '@vitejs/devtools-kit':
         specifier: workspace:*
         version: link:../kit
-      '@vitejs/devtools-rolldown':
-        specifier: workspace:*
-        version: link:../rolldown
-      '@vitejs/devtools-vite':
-        specifier: workspace:*
-        version: link:../vite
-      '@vitejs/devtools-vitest':
-        specifier: workspace:*
-        version: link:../vitest
+      '@vitejs/devtools-oxc':
+        specifier: workspace:^
+        version: link:../oxc
       birpc:
         specifier: catalog:deps
         version: 4.0.0
@@ -845,6 +839,9 @@ importers:
       h3:
         specifier: catalog:deps
         version: 2.0.1-rc.22(crossws@0.4.9(srvx@0.11.15))
+      local-pkg:
+        specifier: catalog:deps
+        version: 1.2.1
       mlly:
         specifier: catalog:deps
         version: 1.8.2
@@ -864,6 +861,15 @@ importers:
       '@clack/prompts':
         specifier: catalog:inlined
         version: 1.7.0
+      '@vitejs/devtools-rolldown':
+        specifier: workspace:*
+        version: link:../rolldown
+      '@vitejs/devtools-vite':
+        specifier: workspace:*
+        version: link:../vite
+      '@vitejs/devtools-vitest':
+        specifier: workspace:*
+        version: link:../vitest
       '@vitejs/plugin-vue':
         specifier: catalog:build
         version: 6.0.7(vite@8.1.4)(vue@3.5.39(typescript@6.0.3))
@@ -909,12 +915,18 @@ importers:
       devframe:
         specifier: catalog:deps
         version: 0.6.2(srvx@0.11.15)(typescript@6.0.3)
+      local-pkg:
+        specifier: catalog:deps
+        version: 1.2.1
       mlly:
         specifier: catalog:deps
         version: 1.8.2
       nostics:
         specifier: catalog:deps
         version: 1.1.4
+      nypm:
+        specifier: catalog:deps
+        version: 0.6.8
     devDependencies:
       human-id:
         specifier: catalog:inlined
@@ -1653,32 +1665,11 @@ packages:
     peerDependencies:
       devframe: 0.6.2
 
-  '@devframes/plugin-inspect@0.6.1':
-    resolution: {integrity: sha512-vVAY31BNdURRM5eTCwnpTVioZowd1jHHKxnNR/b/uSvFNtmpAtk+NlS8l5fnw381sTc6oSlXAa9wKCdysoKlxQ==}
-    hasBin: true
-    peerDependencies:
-      devframe: 0.6.1
-      vite: ^8.1.4
-    peerDependenciesMeta:
-      vite:
-        optional: true
-
   '@devframes/plugin-inspect@0.6.2':
     resolution: {integrity: sha512-sXPWu/FII13lBx9zQFVXD9w9sey57ii7LN23YiD/1neF3tVG9bZ/ZHmGjST+1qvCcszGAGKmMROBK6RlfGYWog==}
     hasBin: true
     peerDependencies:
       devframe: 0.6.2
-      vite: ^8.1.4
-    peerDependenciesMeta:
-      vite:
-        optional: true
-
-  '@devframes/plugin-messages@0.6.1':
-    resolution: {integrity: sha512-oW8/S8iUJAdout56/TwiFAKb7S+JZAZZP+wd4dMWgDnSLWYmMwVGniP8S5mLnndqUsJPzY8yoJQbSFtkEuegoA==}
-    hasBin: true
-    peerDependencies:
-      '@devframes/hub': 0.6.1
-      devframe: 0.6.1
       vite: ^8.1.4
     peerDependenciesMeta:
       vite:
@@ -1690,16 +1681,6 @@ packages:
     peerDependencies:
       '@devframes/hub': 0.6.2
       devframe: 0.6.2
-      vite: ^8.1.4
-    peerDependenciesMeta:
-      vite:
-        optional: true
-
-  '@devframes/plugin-terminals@0.6.1':
-    resolution: {integrity: sha512-cWDYgKQcD0/T3F6BPRqHYjrRl2NY5GeBl071mtxvJVvc4VUfvFz0TCRdXrcVhamXe70RLELFLOKg0mC6TIx6zw==}
-    hasBin: true
-    peerDependencies:
-      devframe: 0.6.1
       vite: ^8.1.4
     peerDependenciesMeta:
       vite:
@@ -10769,17 +10750,6 @@ snapshots:
       tinyexec: 1.2.4
       zigpty: 0.2.1
 
-  '@devframes/plugin-inspect@0.6.1(devframe@0.6.0(srvx@0.11.15)(typescript@6.0.3))(valibot@1.4.2(typescript@6.0.3))(vite@8.1.4)':
-    dependencies:
-      '@valibot/to-json-schema': 1.7.1(valibot@1.4.2(typescript@6.0.3))
-      devframe: 0.6.0(srvx@0.11.15)(typescript@6.0.3)
-      nostics: 1.1.4
-    optionalDependencies:
-      vite: 8.1.4(@types/node@25.0.3)(@vitejs/devtools@0.4.1)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.44.1)(tsx@4.23.1)(yaml@2.9.0)
-    transitivePeerDependencies:
-      - valibot
-    optional: true
-
   '@devframes/plugin-inspect@0.6.2(devframe@0.6.2(srvx@0.11.15)(typescript@6.0.3))(valibot@1.4.2(typescript@6.0.3))(vite@8.1.4)':
     dependencies:
       '@valibot/to-json-schema': 1.7.1(valibot@1.4.2(typescript@6.0.3))
@@ -10790,15 +10760,6 @@ snapshots:
     transitivePeerDependencies:
       - valibot
 
-  '@devframes/plugin-messages@0.6.1(@devframes/hub@0.6.1(devframe@0.6.0(srvx@0.11.15)(typescript@6.0.3)))(devframe@0.6.0(srvx@0.11.15)(typescript@6.0.3))(vite@8.1.4)':
-    dependencies:
-      '@devframes/hub': 0.6.1(devframe@0.6.0(srvx@0.11.15)(typescript@6.0.3))
-      devframe: 0.6.0(srvx@0.11.15)(typescript@6.0.3)
-      nostics: 1.1.4
-    optionalDependencies:
-      vite: 8.1.4(@types/node@25.0.3)(@vitejs/devtools@0.4.1)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.44.1)(tsx@4.23.1)(yaml@2.9.0)
-    optional: true
-
   '@devframes/plugin-messages@0.6.2(@devframes/hub@0.6.2(devframe@0.6.2(srvx@0.11.15)(typescript@6.0.3)))(devframe@0.6.2(srvx@0.11.15)(typescript@6.0.3))(vite@8.1.4)':
     dependencies:
       '@devframes/hub': 0.6.2(devframe@0.6.2(srvx@0.11.15)(typescript@6.0.3))
@@ -10806,21 +10767,6 @@ snapshots:
       nostics: 1.1.4
     optionalDependencies:
       vite: 8.1.4(@types/node@25.0.3)(@vitejs/devtools@0.3.4)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.44.1)(tsx@4.23.1)(yaml@2.9.0)
-
-  '@devframes/plugin-terminals@0.6.1(devframe@0.6.0(srvx@0.11.15)(typescript@6.0.3))(typescript@6.0.3)(vite@8.1.4)':
-    dependencies:
-      '@xterm/addon-fit': 0.11.0
-      '@xterm/xterm': 6.0.0
-      devframe: 0.6.0(srvx@0.11.15)(typescript@6.0.3)
-      nostics: 1.1.4
-      pathe: 2.0.3
-      valibot: 1.4.2(typescript@6.0.3)
-      zigpty: 0.2.1
-    optionalDependencies:
-      vite: 8.1.4(@types/node@25.0.3)(@vitejs/devtools@0.4.1)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.44.1)(tsx@4.23.1)(yaml@2.9.0)
-    transitivePeerDependencies:
-      - typescript
-    optional: true
 
   '@devframes/plugin-terminals@0.6.2(devframe@0.6.2(srvx@0.11.15)(typescript@6.0.3))(typescript@6.0.3)(vite@8.1.4)':
     dependencies:
@@ -14605,15 +14551,15 @@ snapshots:
 
   '@vitejs/devtools@0.4.1(crossws@0.4.9(srvx@0.11.15))(srvx@0.11.15)(typescript@6.0.3)(valibot@1.4.2(typescript@6.0.3))(vite@8.1.4)':
     dependencies:
-      '@devframes/hub': 0.6.1(devframe@0.6.0(srvx@0.11.15)(typescript@6.0.3))
-      '@devframes/plugin-inspect': 0.6.1(devframe@0.6.0(srvx@0.11.15)(typescript@6.0.3))(valibot@1.4.2(typescript@6.0.3))(vite@8.1.4)
-      '@devframes/plugin-messages': 0.6.1(@devframes/hub@0.6.1(devframe@0.6.0(srvx@0.11.15)(typescript@6.0.3)))(devframe@0.6.0(srvx@0.11.15)(typescript@6.0.3))(vite@8.1.4)
-      '@devframes/plugin-terminals': 0.6.1(devframe@0.6.0(srvx@0.11.15)(typescript@6.0.3))(typescript@6.0.3)(vite@8.1.4)
+      '@devframes/hub': 0.6.2(devframe@0.6.2(srvx@0.11.15)(typescript@6.0.3))
+      '@devframes/plugin-inspect': 0.6.2(devframe@0.6.2(srvx@0.11.15)(typescript@6.0.3))(valibot@1.4.2(typescript@6.0.3))(vite@8.1.4)
+      '@devframes/plugin-messages': 0.6.2(@devframes/hub@0.6.2(devframe@0.6.2(srvx@0.11.15)(typescript@6.0.3)))(devframe@0.6.2(srvx@0.11.15)(typescript@6.0.3))(vite@8.1.4)
+      '@devframes/plugin-terminals': 0.6.2(devframe@0.6.2(srvx@0.11.15)(typescript@6.0.3))(typescript@6.0.3)(vite@8.1.4)
       '@vitejs/devtools-kit': 0.4.1(srvx@0.11.15)(typescript@6.0.3)(vite@8.1.4)
       '@vitejs/devtools-rolldown': 0.4.1(srvx@0.11.15)(typescript@6.0.3)(vite@8.1.4)(vue@3.5.39(typescript@6.0.3))
       birpc: 4.0.0
       cac: 7.0.0
-      devframe: 0.6.0(srvx@0.11.15)(typescript@6.0.3)
+      devframe: 0.6.2(srvx@0.11.15)(typescript@6.0.3)
       h3: 2.0.1-rc.22(crossws@0.4.9(srvx@0.11.15))
       mlly: 1.8.2
       nostics: 1.1.4
