@@ -58,8 +58,6 @@
     "@humanwhocodes/momoa": "catalog:frontend",
     "@nuxt/kit": "catalog:build",
     "@nuxt/ui": "catalog:frontend",
-    "@shikijs/langs": "catalog:frontend",
-    "@shikijs/themes": "catalog:frontend",
     "@types/picomatch": "catalog:types",
     "@vitejs/devtools": "workspace:*",
     "@vitejs/devtools-kit": "workspace:*",

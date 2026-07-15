@@ -223,12 +223,6 @@ catalogs:
     '@nuxt/ui':
       specifier: ^4.9.0
       version: 4.9.0
-    '@shikijs/langs':
-      specifier: ^4.3.1
-      version: 4.3.1
-    '@shikijs/themes':
-      specifier: ^4.3.1
-      version: 4.3.1
     '@vueuse/components':
       specifier: ^14.3.0
       version: 14.3.0
@@ -983,12 +977,6 @@ importers:
       '@nuxt/ui':
         specifier: catalog:frontend
         version: 4.9.0(69a753607f3b061828fb04a39eb90b8d)
-      '@shikijs/langs':
-        specifier: catalog:frontend
-        version: 4.3.1
-      '@shikijs/themes':
-        specifier: catalog:frontend
-        version: 4.3.1
       '@types/picomatch':
         specifier: catalog:types
         version: 4.0.3

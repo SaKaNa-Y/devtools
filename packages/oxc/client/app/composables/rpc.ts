@@ -81,19 +81,6 @@ export async function connect() {
         },
       },
     })
-
-    // Cache auto-discovery. Only available when embedded in Vite DevTools (core
-    // registers `devtoolskit:internal:rpc:server:list`); standalone devframe
-    // has no such function, so skip caching gracefully rather than fail the
-    // whole connection.
-    try {
-      const functions = await rpc.value.call('devtoolskit:internal:rpc:server:list')
-      const cacheableFunctions = Object.keys(functions).filter(name => functions[name]?.cacheable)
-      rpc.value.cacheManager.updateOptions({
-        functions: [...cacheableFunctions],
-      })
-    } catch {}
-
     connectionState.connected = true
   } catch (e) {
     connectionState.error = e as Error
