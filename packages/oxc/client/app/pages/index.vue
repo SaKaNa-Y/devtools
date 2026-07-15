@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import BannerOxcDevTools from '@vitejs/devtools-ui/components/banners/BannerOxcDevTools'
+
 const rpc = useRpc()
 
 const { data: overview } = useAsyncData(
@@ -29,7 +31,7 @@ const cardUi = {
 
 <template>
   <div class="flex flex-col items-center gap-8 font-mono translate-y-50">
-    <visual-logo />
+    <BannerOxcDevTools />
 
     <div class="flex flex-col md:flex-row items-center gap-4">
       <UCard
