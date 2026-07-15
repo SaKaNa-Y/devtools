@@ -1,5 +1,5 @@
 import type { DevToolsClientContext, DevToolsClientRpcHost } from '@vitejs/devtools-kit/client'
-import { RpcFunctionsCollectorBase } from '@vitejs/devtools-rpc'
+import { RpcFunctionsCollectorBase } from 'devframe/rpc'
 import { rpcFunctions } from './rpc/index'
 
 const context: DevToolsClientContext = {

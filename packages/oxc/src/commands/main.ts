@@ -2,8 +2,8 @@ import { define } from 'gunshi'
 import { H3, serve, serveStatic } from 'h3'
 import { readFile, stat } from 'node:fs/promises'
 import { join } from 'node:path'
-import { createRpcServer } from '@vitejs/devtools-rpc/server'
-import { createWsRpcPreset } from '@vitejs/devtools-rpc/presets/ws/server'
+import { createRpcServer } from 'devframe/rpc/server'
+import { attachWsRpcTransport } from 'devframe/rpc/transports/ws-server'
 import { clientRpc } from '../node/collector'
 import { clientPublicDir } from '../dirs'
 import { getPort } from 'get-port-please'
@@ -14,10 +14,9 @@ const rpcPort = await getPort({
   random: true,
 })
 
-createRpcServer(clientRpc.functions, {
-  preset: createWsRpcPreset({
-    port: rpcPort,
-  }),
+const rpcGroup = createRpcServer(clientRpc.functions)
+attachWsRpcTransport(rpcGroup, {
+  port: rpcPort,
 })
 
 export const mainCommand = define({

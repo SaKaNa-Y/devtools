@@ -2,8 +2,8 @@ import type { ServerFunctions } from '../../../src/node/rpc'
 import { useRuntimeConfig } from '#app/nuxt'
 import { getDevToolsRpcClient } from '@vitejs/devtools-kit/client'
 import { reactive, shallowRef } from 'vue'
-import { createRpcClient } from '@vitejs/devtools-rpc/client'
-import { createWsRpcPreset } from '@vitejs/devtools-rpc/presets/ws/client'
+import { createRpcClient } from 'devframe/rpc/client'
+import { createWsRpcChannel } from 'devframe/rpc/transports/ws-client'
 
 export const connectionState = reactive<{
   connected: boolean
@@ -24,12 +24,10 @@ export type RpcClient = {
   call(method: string, params?: unknown): Promise<unknown>
 }
 
-/** Type assertion: convert h3 RPC client ($call) to unified RpcClient interface */
-function asRpcClient(client: {
-  $call: (method: string, ...args: unknown[]) => Promise<unknown>
-}): RpcClient {
+/** Adapt a birpc client (methods called by name) to the unified RpcClient interface */
+function asRpcClient(client: Record<string, (...args: unknown[]) => Promise<unknown>>): RpcClient {
   return {
-    call: (name: string, ...args: unknown[]) => client.$call(name, ...args),
+    call: (name: string, ...args: unknown[]) => client[name](...args),
   } as RpcClient
 }
 
@@ -48,13 +46,13 @@ export async function connect() {
       const wsClient = createRpcClient<ServerFunctions>(
         {},
         {
-          preset: createWsRpcPreset({
+          channel: createWsRpcChannel({
             url: `ws://localhost:${connection.port}`,
           }),
         },
       )
       rawRpcClient = asRpcClient(
-        wsClient as { $call: (method: string, ...args: unknown[]) => Promise<unknown> },
+        wsClient as unknown as Record<string, (...args: unknown[]) => Promise<unknown>>,
       )
     } else {
       const rpcClient = await getDevToolsRpcClient({
