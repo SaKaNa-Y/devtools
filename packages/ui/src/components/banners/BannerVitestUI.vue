@@ -66,7 +66,7 @@
   </svg>
 </template>
 
-<style scoped>
+<style>
 /* Self-contained so the banner renders identically under any host CSS engine
    (UnoCSS in the Vite/Rolldown clients, Tailwind in the Oxc client) without
    relying on the host to scan these classes. `currentColor` drives the
@@ -78,7 +78,7 @@
   color: #08060e;
   pointer-events: none;
 }
-:global(.dark) .banner-devtools {
+.dark .banner-devtools {
   color: #fff;
 }
 </style>
