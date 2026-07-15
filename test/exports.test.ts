@@ -10,9 +10,10 @@ describePackagesApiSnapshots({
     )
     if (!pkg.name || pkg.private)
       return false
-    // `@vitejs/devtools-oxc` (donated from yuyinws/oxc-inspector) is parked out
-    // of the workspace and not built here; skip its export snapshot until its
-    // build is migrated onto the current devframe/hub APIs.
+    // `@vitejs/devtools-oxc` (donated from yuyinws/oxc-inspector) is a workspace
+    // member, but its build is not wired into turbo yet (its @nuxt/ui client is
+    // pending a UI-stack decision), so there is no dist to snapshot. Skip it
+    // until the build is enabled.
     if (pkg.name === '@vitejs/devtools-oxc')
       return false
   },

@@ -42,23 +42,22 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "@clack/prompts": "catalog:",
-    "@vitejs/devtools-kit": "catalog:",
-    "ansis": "catalog:",
+    "@clack/prompts": "catalog:inlined",
+    "@vitejs/devtools-kit": "workspace:*",
+    "ansis": "catalog:deps",
     "devframe": "catalog:deps",
-    "get-port-please": "catalog:",
-    "gunshi": "catalog:",
-    "h3": "catalog:",
+    "get-port-please": "catalog:deps",
+    "gunshi": "catalog:deps",
+    "h3": "catalog:deps",
     "nostics": "catalog:deps",
-    "pathe": "catalog:",
-    "tinyexec": "catalog:"
+    "pathe": "catalog:deps",
+    "tinyexec": "catalog:deps"
   },
   "devDependencies": {
-    "@types/node": "catalog:",
-    "oxfmt": "catalog:",
-    "oxlint": "catalog:",
-    "tsdown": "catalog:",
-    "tsx": "catalog:",
-    "typescript": "catalog:"
+    "oxfmt": "catalog:devtools",
+    "oxlint": "catalog:devtools",
+    "tsdown": "catalog:build",
+    "tsx": "catalog:build",
+    "typescript": "catalog:devtools"
   }
 }

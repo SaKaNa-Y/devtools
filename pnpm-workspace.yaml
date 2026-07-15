@@ -16,11 +16,6 @@ trustPolicyExclude:
   - tinyexec
 packages:
   - packages/*
-  # `packages/oxc` (donated from yuyinws/oxc-inspector) is parked out of the
-  # workspace until its build is migrated off the retired `@vitejs/devtools-rpc`
-  # package and onto the current devframe/hub APIs. See the follow-up tracked in
-  # the import PR before wiring it back in.
-  - '!packages/oxc'
   - examples/*
   - docs
   - e2e
@@ -68,12 +63,14 @@ catalogs:
     '@devframes/plugin-terminals': ^0.6.0
     '@rolldown/debug': ^1.1.5
     actionspack: ^0.1.5
+    ansis: ^4.2.0
     birpc: ^4.0.0
     cac: ^7.0.0
     devframe: ^0.6.0
     diff: ^9.0.0
     envinfo: ^7.21.0
     get-port-please: ^3.2.0
+    gunshi: ^0.29.2
     h3: 2.0.1-rc.22
     local-pkg: ^1.2.1
     mlly: ^1.8.2
@@ -101,6 +98,8 @@ catalogs:
     chokidar: ^5.0.0
     eslint: ^10.6.0
     nano-staged: ^1.0.2
+    oxfmt: ^0.35.0
+    oxlint: ^1.50.0
     serve: ^14.2.6
     simple-git-hooks: ^2.13.1
     skills-npm: ^1.2.0
