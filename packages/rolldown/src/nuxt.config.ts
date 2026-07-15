@@ -141,6 +141,9 @@ export default defineNuxtConfig({
       },
       exclude: [
         '../../../vite/**/*',
+        // oxc ships its own @nuxt/ui client; keep it out of rolldown's
+        // workspace-wide Nuxt typecheck until its build is wired in.
+        '../../../oxc/**/*',
       ],
     },
     // Temporary disable type check for nuxt, rely on CI for now

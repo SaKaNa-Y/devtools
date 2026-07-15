@@ -17,7 +17,7 @@ Vite DevTools is a devtools framework for the Vite ecosystem. It provides shared
 A growing set of integrations already build on Vite DevTools Kit:
 
 - **[Nuxt DevTools v4](https://github.com/nuxt/devtools)** — built on Vite DevTools Kit
-- **[Oxc Inspector](https://github.com/yuyinws/oxc-inspector)** — Kit integration with custom RPC functions
+- **[`@vitejs/devtools-oxc`](https://github.com/vitejs/devtools/tree/main/packages/oxc)** — first-party Oxc toolchain (oxlint/oxfmt) inspector with custom RPC functions
 - **[UnoCSS Inspector](https://github.com/unocss/unocss)** — dock integration for UnoCSS
 - **[vite-plugin-vue-tracer](https://github.com/antfu/vite-plugin-vue-tracer)** — action button that triggers a DOM inspector
 
@@ -146,4 +146,4 @@ export default defineConfig({
 
 Vite DevTools is built on **`@vitejs/devtools-kit`**, the integration hub that owns the dock, command palette, terminal aggregation, and the `Plugin.devtools.setup` hook every integration uses. Kit in turn builds on **Devframe**, a framework-neutral foundation that any single tool can use directly — including standalone CLIs, MCP servers, or static dashboards that have no Vite dependency. See [Devframe](https://devfra.me/guide/) for that path.
 
-Third-party integrations like [Oxc Inspector](https://github.com/yuyinws/oxc-inspector) plug into Kit's plugin API. To extend Vite DevTools, see [Vite DevTools Kit](/kit/).
+Integrations like [Nuxt DevTools](https://github.com/nuxt/devtools) and the first-party [`@vitejs/devtools-oxc`](https://github.com/vitejs/devtools/tree/main/packages/oxc) plug into Kit's plugin API. To extend Vite DevTools, see [Vite DevTools Kit](/kit/).

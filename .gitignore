@@ -16,6 +16,7 @@ packages/rolldown/src/app/public/fonts
 packages/rolldown/runtime
 packages/kit/skills
 .rolldown
+.devtools-oxc
 *.tsbuildinfo
 **/.vitepress/cache
 .turbo
