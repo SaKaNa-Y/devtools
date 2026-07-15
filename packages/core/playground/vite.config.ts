@@ -14,6 +14,7 @@ import { GitUIPlugin } from '../../../examples/plugin-git-ui/src/node'
 import { DevTools } from '../../core/src'
 import { buildCSS } from '../../core/src/client/webcomponents/scripts/build-css'
 import { hideDockWhenEmpty } from '../../core/src/node/plugins/auto-hide'
+import { DevToolsOxc } from '../../oxc/src/vite'
 // eslint-disable-next-line ts/ban-ts-comment
 // @ts-ignore ignore the type error
 import { DevToolsRolldownUI } from '../../rolldown/src/node'
@@ -78,6 +79,7 @@ export default defineConfig({
     DevToolsRolldownUI(),
     DevToolsViteUI(),
     DevToolsVitestUI(),
+    DevToolsOxc(),
     UnoCSS(),
     Tracer({
       viteDevtools: true,

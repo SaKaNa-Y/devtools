@@ -21,6 +21,13 @@
         "dist/**"
       ]
     },
+    "@vitejs/devtools-oxc#build": {
+      "outputLogs": "new-only",
+      "dependsOn": ["^build"],
+      "outputs": [
+        "dist/**"
+      ]
+    },
     "@vitejs/devtools-rolldown#build": {
       "outputLogs": "new-only",
       "outputs": [

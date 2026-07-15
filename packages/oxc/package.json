@@ -32,7 +32,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsdown && pnpm build:client",
+    "build": "tsdown",
     "build:client": "pnpm -C client run build",
     "dev": "pnpm -C client dev",
     "lint": "oxlint && oxfmt --check",
