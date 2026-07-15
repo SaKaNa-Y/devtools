@@ -32,7 +32,7 @@
     "codemirror": "catalog:",
     "codemirror-theme-vitesse": "catalog:",
     "nuxt": "catalog:",
-    "oxc-inspector": "workspace:*",
+    "@vitejs/devtools-oxc": "workspace:*",
     "oxlint": "catalog:",
     "pathe": "catalog:",
     "picomatch": "catalog:",
