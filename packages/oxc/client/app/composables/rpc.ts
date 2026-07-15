@@ -1,9 +1,10 @@
-import type { ServerFunctions } from '../../../src/node/rpc'
-import { useRuntimeConfig } from '#app/nuxt'
+import type {} from '@vitejs/devtools'
+import type { DevToolsRpcClient } from '@vitejs/devtools-kit/client'
+import type {} from '../../../src/node/rpc'
 import { getDevToolsRpcClient } from '@vitejs/devtools-kit/client'
+import { DEVTOOLS_MOUNT_PATH } from '@vitejs/devtools-kit/constants'
 import { reactive, shallowRef } from 'vue'
-import { createRpcClient } from 'devframe/rpc/client'
-import { createWsRpcChannel } from 'devframe/rpc/transports/ws-client'
+import { useRuntimeConfig } from '#app/nuxt'
 
 export const connectionState = reactive<{
   connected: boolean
@@ -13,78 +14,86 @@ export const connectionState = reactive<{
   error: null,
 })
 
-/** Unified RPC client type, compatible with two sources: h3 WebSocket and DevTools */
-export type RpcClient = {
-  /** Typed call with full inference: method name, params and return value from ServerFunctions */
-  call<K extends keyof ServerFunctions>(
-    method: K,
-    ...args: Parameters<ServerFunctions[K]>
-  ): Promise<Awaited<ReturnType<ServerFunctions[K]>>>
-  /** Fallback for built-in DevTools methods (e.g. vite:core:open-in-editor) */
-  call(method: string, params?: unknown): Promise<unknown>
-}
+const rpc = shallowRef<DevToolsRpcClient>(undefined!)
 
-/** Adapt a birpc client (methods called by name) to the unified RpcClient interface */
-function asRpcClient(client: Record<string, (...args: unknown[]) => Promise<unknown>>): RpcClient {
-  return {
-    call: (name: string, ...args: unknown[]) => client[name](...args),
-  } as RpcClient
-}
+const CONNECTION_META_FILENAME = '__connection.json'
 
-const rpc = shallowRef<RpcClient>(undefined!)
+/**
+ * Resolve the devframe connection descriptor across candidate mount paths.
+ *
+ * `getDevToolsRpcClient` fetches `<base>__connection.json` without checking the
+ * HTTP status, so a 404 JSON body (e.g. hitting the kit mount path `/__devtools/`
+ * while running standalone) would be accepted as bogus meta. We probe the
+ * candidates ourselves with an `res.ok` guard and report which base actually
+ * served it, so the WS endpoint resolves against the right origin.
+ */
+async function resolveConnection(bases: string[]) {
+  for (const base of bases) {
+    try {
+      const res = await fetch(`${base}${CONNECTION_META_FILENAME}`)
+      if (!res.ok) continue
+      return { connectionMeta: await res.json(), base }
+    } catch {}
+  }
+  return undefined
+}
 
 export async function connect() {
   const runtimeConfig = useRuntimeConfig()
   try {
-    let rawRpcClient: RpcClient
-
-    const connection = await $fetch<{ backend?: string; port: number }>(
-      '/.devtools.vdt-connection.json',
-    )
-
-    if (connection?.backend === 'h3') {
-      const wsClient = createRpcClient<ServerFunctions>(
-        {},
-        {
-          channel: createWsRpcChannel({
-            url: `ws://localhost:${connection.port}`,
-          }),
-        },
-      )
-      rawRpcClient = asRpcClient(
-        wsClient as unknown as Record<string, (...args: unknown[]) => Promise<unknown>>,
-      )
-    } else {
-      const rpcClient = await getDevToolsRpcClient({
-        baseURL: ['/.devtools/', runtimeConfig.app.baseURL],
-        connectionMeta: runtimeConfig.app.connection,
-        wsOptions: {
-          onConnected: () => {
-            connectionState.connected = true
-          },
-          onError: e => {
-            connectionState.error = e
-          },
-          onDisconnected: () => {
-            connectionState.connected = false
-          },
-        },
-        rpcOptions: {
-          onGeneralError: (e, name) => {
-            connectionState.error = e
-            console.error(`[devtools-oxc] RPC error on executing "${name}":`)
-          },
-          onFunctionError: (e, name) => {
-            connectionState.error = e
-            console.error(`[devtools-oxc] RPC error on executing "${name}":`)
-          },
-        },
-      })
-
-      rawRpcClient = rpcClient as RpcClient
+    // Embedded in Vite DevTools the connection meta is injected via
+    // `runtimeConfig.app.connection` (served by core at the kit mount path);
+    // standalone (devframe CLI) it is served from the app's own base. Probe
+    // both, keeping the base that answered first so the WS URL resolves there.
+    let bases = [DEVTOOLS_MOUNT_PATH, runtimeConfig.app.baseURL]
+    let connectionMeta = runtimeConfig.app.connection
+    if (!connectionMeta) {
+      const resolved = await resolveConnection(bases)
+      if (resolved) {
+        connectionMeta = resolved.connectionMeta
+        bases = [resolved.base, ...bases.filter(base => base !== resolved.base)]
+      }
     }
 
-    rpc.value = rawRpcClient
+    rpc.value = await getDevToolsRpcClient({
+      baseURL: bases,
+      cacheOptions: true,
+      connectionMeta,
+      wsOptions: {
+        onConnected: () => {
+          connectionState.connected = true
+        },
+        onError: e => {
+          connectionState.error = e
+        },
+        onDisconnected: () => {
+          connectionState.connected = false
+        },
+      },
+      rpcOptions: {
+        onGeneralError: (e, name) => {
+          connectionState.error = e
+          console.error(`[devtools-oxc] RPC error on executing "${name}":`)
+        },
+        onFunctionError: (e, name) => {
+          connectionState.error = e
+          console.error(`[devtools-oxc] RPC error on executing "${name}":`)
+        },
+      },
+    })
+
+    // Cache auto-discovery. Only available when embedded in Vite DevTools (core
+    // registers `devtoolskit:internal:rpc:server:list`); standalone devframe
+    // has no such function, so skip caching gracefully rather than fail the
+    // whole connection.
+    try {
+      const functions = await rpc.value.call('devtoolskit:internal:rpc:server:list')
+      const cacheableFunctions = Object.keys(functions).filter(name => functions[name]?.cacheable)
+      rpc.value.cacheManager.updateOptions({
+        functions: [...cacheableFunctions],
+      })
+    } catch {}
+
     connectionState.connected = true
   } catch (e) {
     connectionState.error = e as Error

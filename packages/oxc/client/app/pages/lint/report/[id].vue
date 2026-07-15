@@ -1,39 +1,45 @@
 <script setup lang="ts">
-import { useDebounceFn } from '@vueuse/core'
+import { useAsyncState, useDebounceFn } from '@vueuse/core'
+import { computed, ref, watch } from 'vue'
 import { isMatch } from 'picomatch'
+import { useRoute } from '#app/composables/router'
+import { useRpc } from '#imports'
 
 const sessionId = useRoute().params.id as string
 const rpc = useRpc()
-const session = await rpc.value.call('devtools-oxc:get-lint-session', { sessionId })!
+const { state: session, isLoading } = useAsyncState(
+  () => rpc.value.call('devtools-oxc:get-lint-session', { sessionId }),
+  null,
+)
 
-// 判断是否显示空状态
-const showEmpty = computed(() => session?.logs.files.length === 0)
+// Whether to show the empty state
+const showEmpty = computed(() => session.value?.logs.files.length === 0)
 
-// 计算问题总数
+// Compute the total number of issues
 const totalIssues = computed(() => {
-  if (!session?.logs) {
+  if (!session.value?.logs) {
     return 0
   }
-  return session.logs.files.reduce(
+  return session.value.logs.files.reduce(
     (sum, file) => sum + file.lines.reduce((s, line) => s + line.messages.length, 0),
     0,
   )
 })
 
-// 判断是否显示摘要
-const showSummary = computed(() => !!session?.meta.summary)
+// Whether to show the summary
+const showSummary = computed(() => !!session.value?.meta.summary)
 
 const search = ref('')
 
-// 防抖的搜索值
+// Debounced search value
 const debouncedSearch = ref('')
 
-// 使用 VueUse 的 useDebounceFn 创建防抖函数
+// Create a debounce function with VueUse's useDebounceFn
 const debouncedUpdateSearch = useDebounceFn((value: string) => {
   debouncedSearch.value = value
 }, 300)
 
-// 监听搜索值变化
+// Watch for search value changes
 watch(
   search,
   newValue => {
@@ -43,34 +49,37 @@ watch(
 )
 
 const filteredFiles = computed(() => {
-  if (!session?.logs?.files) {
+  if (!session.value?.logs?.files) {
     return []
   }
 
   const searchTerm = debouncedSearch.value.trim()
 
-  // 如果搜索词为空，返回所有文件
+  // Return all files when the search term is empty
   if (!searchTerm) {
-    return session.logs.files
+    return session.value.logs.files
   }
 
-  // 尝试使用 picomatch 进行 glob 匹配
+  // Try glob matching with picomatch
   try {
-    return session.logs.files.filter(file => isMatch(file.filename, searchTerm, { contains: true }))
+    return session.value.logs.files.filter(file =>
+      isMatch(file.filename, searchTerm, { contains: true }),
+    )
   } catch {
-    // 如果 glob 模式无效，回退到简单的字符串包含匹配
-    return session.logs.files.filter(file => file.filename.includes(searchTerm))
+    // Fall back to simple substring matching when the glob pattern is invalid
+    return session.value.logs.files.filter(file => file.filename.includes(searchTerm))
   }
 })
 
-// 判断是否显示文件列表
+// Whether to show the file list
 const showFiles = computed(() => !!filteredFiles.value && filteredFiles.value.length > 0)
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
+  <VisualLoading v-if="isLoading" text="Loading session..." />
+  <div v-else class="flex flex-col gap-4">
     <Back />
-    <!-- 摘要信息 -->
+    <!-- Summary info -->
     <SummaryCard
       v-if="showSummary && session?.meta.summary"
       :summary="session.meta.summary"
