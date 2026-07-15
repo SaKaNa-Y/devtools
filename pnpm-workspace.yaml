@@ -16,6 +16,11 @@ trustPolicyExclude:
   - tinyexec
 packages:
   - packages/*
+  # `packages/oxc` (donated from yuyinws/oxc-inspector) is parked out of the
+  # workspace until its build is migrated off the retired `@vitejs/devtools-rpc`
+  # package and onto the current devframe/hub APIs. See the follow-up tracked in
+  # the import PR before wiring it back in.
+  - '!packages/oxc'
   - examples/*
   - docs
   - e2e

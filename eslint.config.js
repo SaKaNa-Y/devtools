@@ -9,6 +9,10 @@ export default antfu({
     'plans',
     'e2e/fixtures/**/dist',
     'e2e/fixtures/**/.vite-devtools',
+    // `packages/oxc` (donated from yuyinws/oxc-inspector) is parked out of the
+    // workspace and still carries its own oxlint/oxfmt style; it is linted by
+    // its own toolchain until its build is migrated onto the current APIs.
+    'packages/oxc',
   ],
 })
   .append(nuxt())

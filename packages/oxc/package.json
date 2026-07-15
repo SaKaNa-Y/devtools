@@ -1,13 +1,25 @@
 {
   "type": "module",
-  "name": "oxc-inspector",
-  "version": "0.0.1-beta.9",
+  "name": "@vitejs/devtools-oxc",
+  "version": "0.4.0",
   "packageManager": "pnpm@10.30.2",
-  "description": "Inspect and understand the Oxc toolchain with ease.",
-  "sideEffects": false,
+  "description": "DevTools for the Oxc toolchain",
+  "author": "Leo (https://github.com/yuyinws)",
+  "license": "MIT",
+  "homepage": "https://github.com/vitejs/devtools/tree/main/packages/oxc#readme",
   "repository": {
-    "url": "https://github.com/yuyinws/oxc-inspector"
+    "directory": "packages/oxc",
+    "type": "git",
+    "url": "git+https://github.com/vitejs/devtools.git"
   },
+  "bugs": "https://github.com/vitejs/devtools/issues",
+  "keywords": [
+    "oxc",
+    "oxlint",
+    "oxfmt",
+    "devtools"
+  ],
+  "sideEffects": false,
   "exports": {
     ".": "./dist/index.mjs",
     "./vite": "./dist/vite.mjs"
@@ -30,8 +42,7 @@
     "prepublishOnly": "pnpm build",
     "play": "pnpm -C playground dev",
     "release": "bumpp -r",
-    "typecheck": "vue-tsc --noEmit",
-    "prepare": "npx simple-git-hooks"
+    "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
     "@clack/prompts": "catalog:",
@@ -41,6 +52,7 @@
     "get-port-please": "catalog:",
     "gunshi": "catalog:",
     "h3": "catalog:",
+    "nostics": "catalog:deps",
     "pathe": "catalog:",
     "tinyexec": "catalog:"
   },
@@ -54,9 +66,6 @@
     "tsdown": "catalog:",
     "tsx": "catalog:",
     "typescript": "catalog:"
-  },
-  "simple-git-hooks": {
-    "pre-commit": "pnpm lint-staged"
   },
   "lint-staged": {
     "*.{js,ts,mjs,cjs,vue}": [

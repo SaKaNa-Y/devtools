@@ -57,3 +57,6 @@ shamefullyHoist: true
 shellEmulator: true
 
 strictPeerDependencies: false
+catalogs:
+  deps:
+    nostics: ^0.0.0

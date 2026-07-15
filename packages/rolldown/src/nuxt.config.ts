@@ -141,6 +141,7 @@ export default defineNuxtConfig({
       },
       exclude: [
         '../../../vite/**/*',
+        '../../../oxc/**/*',
       ],
     },
     // Temporary disable type check for nuxt, rely on CI for now

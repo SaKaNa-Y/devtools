@@ -6,7 +6,9 @@
  Inspect and understand the Oxc toolchain with ease.
 </p>
 
-[![Open on npmx.dev](https://npmx.dev/api/registry/badge/version/oxc-inspector)](https://npmx.dev/package/oxc-inspector)
+<p align='center'>
+ The first-party <code>@vitejs/devtools-oxc</code> package, donated to Vite DevTools from <a href="https://github.com/yuyinws/oxc-inspector">yuyinws/oxc-inspector</a> by <a href="https://github.com/yuyinws">Leo</a>. The standalone <code>oxc-inspector</code> package is deprecated in favor of this one.
+</p>
 
 ## ✨ Features
 
@@ -29,13 +31,13 @@
 ### Install
 
 ```sh
-npm install -D oxc-inspector
+npm install -D @vitejs/devtools-oxc
 
-pnpm add -D oxc-inspector
+pnpm add -D @vitejs/devtools-oxc
 
-yarn add -D oxc-inspector
+yarn add -D @vitejs/devtools-oxc
 
-bun add -D oxc-inspector
+bun add -D @vitejs/devtools-oxc
 ```
 
 ### Generate lint logs
@@ -56,7 +58,7 @@ npx oxc-inspector
 // vite.config.ts
 import { DevTools } from '@vitejs/devtools'
 import { defineConfig } from 'vite'
-import { DevToolsOxc } from 'oxc-inspector/vite'
+import { DevToolsOxc } from '@vitejs/devtools-oxc/vite'
 
 export default defineConfig({
   plugins: [DevTools(), DevToolsOxc()],
