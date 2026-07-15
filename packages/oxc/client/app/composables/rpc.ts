@@ -72,11 +72,11 @@ export async function connect() {
         rpcOptions: {
           onGeneralError: (e, name) => {
             connectionState.error = e
-            console.error(`[oxc-inspector] RPC error on executing "${name}":`)
+            console.error(`[devtools-oxc] RPC error on executing "${name}":`)
           },
           onFunctionError: (e, name) => {
             connectionState.error = e
-            console.error(`[oxc-inspector] RPC error on executing "${name}":`)
+            console.error(`[devtools-oxc] RPC error on executing "${name}":`)
           },
         },
       })

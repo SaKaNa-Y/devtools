@@ -4,21 +4,21 @@ import { clientPublicDir } from './dirs'
 
 export function DevToolsOxc(): PluginWithDevTools {
   return {
-    name: 'oxc-inspector',
+    name: 'devtools-oxc',
     devtools: {
       setup(ctx) {
         for (const fn of rpcFunctions) {
           ctx.rpc.register(fn as any)
         }
 
-        ctx.views.hostStatic('/.oxc-inspector/', clientPublicDir)
+        ctx.views.hostStatic('/.devtools-oxc/', clientPublicDir)
 
         ctx.docks.register({
-          id: 'oxc-inspector',
+          id: 'devtools-oxc',
           title: 'Oxc Inspector',
           icon: 'https://viteplus.dev/projects/oxc.svg',
           type: 'iframe',
-          url: '/.oxc-inspector/',
+          url: '/.devtools-oxc/',
         })
       },
     },

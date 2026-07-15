@@ -11,8 +11,8 @@ export const diagnostics = /* #__PURE__ */ defineDiagnostics({
   reporters: [createConsoleReporter()],
   codes: {
     OXDT0001: {
-      why: 'Oxc logs directory `.oxc-inspector` not found, you might want to run build with `npx oxc-inspector` to generate it first.',
-      fix: 'Run `npx oxc-inspector lint` to generate lint logs before launching the UI.',
+      why: 'Oxc logs directory `.devtools-oxc` not found, you might want to run build with `npx @vitejs/devtools-oxc` to generate it first.',
+      fix: 'Run `npx @vitejs/devtools-oxc lint` to generate lint logs before launching the UI.',
     },
   },
 })

@@ -5,7 +5,7 @@ import { lint } from './commands/lint'
 import { version } from '../package.json'
 
 cli(argv.slice(2), mainCommand, {
-  name: 'oxc-inspector',
+  name: 'devtools-oxc',
   version,
   renderHeader: () => Promise.resolve(''),
   subCommands: {

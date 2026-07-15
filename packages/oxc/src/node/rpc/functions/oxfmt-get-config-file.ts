@@ -2,7 +2,7 @@ import { defineRpcFunction } from '@vitejs/devtools-kit'
 import { getOxfmtConfig } from '../../utils/oxfmt'
 
 export const oxfmtGetConfigFile = defineRpcFunction({
-  name: 'oxc-inspector:get-fmt-config-file',
+  name: 'devtools-oxc:get-fmt-config-file',
   type: 'query',
   setup: () => {
     return {

@@ -43,13 +43,13 @@ bun add -D @vitejs/devtools-oxc
 ### Generate lint logs
 
 ```sh
-npx oxc-inspector lint
+npx @vitejs/devtools-oxc lint
 ```
 
 ### Launch UI
 
 ```sh
-npx oxc-inspector
+npx @vitejs/devtools-oxc
 ```
 
 ### Integrate Vite Devtools

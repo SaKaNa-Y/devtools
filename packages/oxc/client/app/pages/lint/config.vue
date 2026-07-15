@@ -10,7 +10,7 @@ const rpc = useRpc()
 
 const { data: configData } = await useAsyncData(
   'config',
-  () => rpc.value.call('oxc-inspector:get-lint-config-file'),
+  () => rpc.value.call('devtools-oxc:get-lint-config-file'),
   { default: () => null },
 )
 

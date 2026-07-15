@@ -9,7 +9,7 @@ type Package = {
 }
 
 export const overview = defineRpcFunction({
-  name: 'oxc-inspector:overview',
+  name: 'devtools-oxc:overview',
   type: 'query',
   setup: () => {
     return {

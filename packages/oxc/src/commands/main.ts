@@ -21,16 +21,16 @@ attachWsRpcTransport(rpcGroup, {
 
 export const mainCommand = define({
   name: 'main',
-  description: 'Start oxc-inspector ui',
+  description: 'Start devtools-oxc ui',
   run: async ({ _ }) => {
     const app = new H3()
 
-    const basePath = '/.oxc-inspector'
+    const basePath = '/.devtools-oxc'
     const toFilePath = (id: string) => {
       const path = id.startsWith(basePath) ? id.slice(basePath.length) || '/' : id
       return path === '/' ? 'index.html' : path.replace(/^\//, '')
     }
-    app.use('/.oxc-inspector/**', event => {
+    app.use('/.devtools-oxc/**', event => {
       if (event.url.pathname.includes('.devtools.vdt-connection.json')) {
         return {
           backend: 'h3',
@@ -55,7 +55,7 @@ export const mainCommand = define({
     })
     serve(app, { port: appPort, silent: true })
     log.info(
-      `Oxc Inspector UI is running on ${c.cyan(`http://localhost:${appPort}/.oxc-inspector`)}`,
+      `Oxc Inspector UI is running on ${c.cyan(`http://localhost:${appPort}/.devtools-oxc`)}`,
     )
   },
 })

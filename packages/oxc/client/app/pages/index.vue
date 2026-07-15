@@ -3,7 +3,7 @@ const rpc = useRpc()
 
 const { data: overview } = useAsyncData(
   'overview',
-  () => rpc.value.call('oxc-inspector:overview'),
+  () => rpc.value.call('devtools-oxc:overview'),
   {
     default: () => ({
       oxlint: {

@@ -10,7 +10,7 @@ const rpc = useRpc()
 
 const { data: configData } = await useAsyncData(
   'fmt-config',
-  () => rpc.value.call('oxc-inspector:get-fmt-config-file'),
+  () => rpc.value.call('devtools-oxc:get-fmt-config-file'),
   { default: () => null },
 )
 

@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@vitejs/devtools": "catalog:",
-    "vite": "catalog:",
-    "oxc-inspector": "workspace:*"
+    "@vitejs/devtools-oxc": "workspace:*",
+    "vite": "catalog:"
   }
 }

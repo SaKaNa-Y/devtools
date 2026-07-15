@@ -26,23 +26,23 @@ export const lint = define({
       const content = await readFile(gitignorePath, 'utf-8')
       const hasEntry = content.split('\n').some(line => {
         const trimmed = line.trim()
-        return trimmed !== '' && !trimmed.startsWith('#') && /\.oxc-inspector/.test(trimmed)
+        return trimmed !== '' && !trimmed.startsWith('#') && /\.devtools-oxc/.test(trimmed)
       })
       if (!hasEntry) {
-        const append = content.endsWith('\n') ? '.oxc-inspector\n' : '\n.oxc-inspector\n'
+        const append = content.endsWith('\n') ? '.devtools-oxc\n' : '\n.devtools-oxc\n'
         await writeFile(gitignorePath, content + append, 'utf-8')
         appended = true
       }
     } catch (err) {
       if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
-        await writeFile(gitignorePath, '.oxc-inspector\n', 'utf-8')
+        await writeFile(gitignorePath, '.devtools-oxc\n', 'utf-8')
         appended = true
       } else {
         throw err
       }
     }
     if (appended) {
-      log.info('Appended .oxc-inspector to .gitignore')
+      log.info('Appended .devtools-oxc to .gitignore')
     }
 
     spin.start('Running Oxlint...')
@@ -52,7 +52,7 @@ export const lint = define({
     const rawOutput = execOxlintCommand(_)
     const groupedOutput = await groupByFilename(rawOutput)
 
-    const logsRootDir = resolve(cwd(), '.oxc-inspector', 'lint')
+    const logsRootDir = resolve(cwd(), '.devtools-oxc', 'lint')
     await mkdir(logsRootDir, { recursive: true })
     const sessionId = Date.now()
     const sessionDir = resolve(logsRootDir, String(sessionId))
