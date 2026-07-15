@@ -215,10 +215,10 @@ catalogs:
       specifier: ^3.3.10
       version: 3.3.10
     '@json-render/core':
-      specifier: 0.13.0
+      specifier: ^0.13.0
       version: 0.13.0
     '@json-render/vue':
-      specifier: 0.13.0
+      specifier: ^0.13.0
       version: 0.13.0
     '@nuxt/ui':
       specifier: ^4.9.0
