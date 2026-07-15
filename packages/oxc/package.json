@@ -1,0 +1,69 @@
+{
+  "type": "module",
+  "name": "oxc-inspector",
+  "version": "0.0.1-beta.9",
+  "packageManager": "pnpm@10.30.2",
+  "description": "Inspect and understand the Oxc toolchain with ease.",
+  "sideEffects": false,
+  "repository": {
+    "url": "https://github.com/yuyinws/oxc-inspector"
+  },
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./vite": "./dist/vite.mjs"
+  },
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "bin": {
+    "oxc-inspector": "./bin/oxc-inspector.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "pnpm dev:client",
+    "dev:client": "pnpm -C client dev",
+    "build": "tsdown && pnpm build:client",
+    "build:client": "pnpm -C client run build",
+    "lint": "oxlint && oxfmt --check",
+    "lint:fix": "oxlint --fix && oxfmt",
+    "prepublishOnly": "pnpm build",
+    "play": "pnpm -C playground dev",
+    "release": "bumpp -r",
+    "typecheck": "vue-tsc --noEmit",
+    "prepare": "npx simple-git-hooks"
+  },
+  "dependencies": {
+    "@clack/prompts": "catalog:",
+    "@vitejs/devtools-kit": "catalog:",
+    "@vitejs/devtools-rpc": "catalog:",
+    "ansis": "catalog:",
+    "get-port-please": "catalog:",
+    "gunshi": "catalog:",
+    "h3": "catalog:",
+    "pathe": "catalog:",
+    "tinyexec": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "bumpp": "catalog:",
+    "lint-staged": "catalog:",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "simple-git-hooks": "catalog:",
+    "tsdown": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,ts,mjs,cjs,vue}": [
+      "pnpm oxlint --fix"
+    ],
+    "*.{js,ts,mjs,cjs,vue,json,yml,md,html,css}": [
+      "pnpm oxfmt"
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.base.json",
+  "references": [
+    { "path": "./client/.nuxt/tsconfig.app.json" },
+    { "path": "./client/.nuxt/tsconfig.server.json" },
+    { "path": "./client/.nuxt/tsconfig.shared.json" },
+    { "path": "./client/.nuxt/tsconfig.node.json" }
+  ],
+  "files": []
+}
