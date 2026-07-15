@@ -1,16 +1,10 @@
 {
   "name": "playground",
   "type": "module",
-  "version": "0.0.1-beta.9",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "pnpm -C .. run build && vite",
     "build": "vite build",
     "preview": "vite preview"
-  },
-  "devDependencies": {
-    "@vitejs/devtools": "catalog:",
-    "@vitejs/devtools-oxc": "workspace:*",
-    "vite": "catalog:"
   }
 }

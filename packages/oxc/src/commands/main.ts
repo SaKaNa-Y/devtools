@@ -14,6 +14,8 @@ const rpcPort = await getPort({
   random: true,
 })
 
+const OXC_DEVTOOLS_BASE = '/__devtools-oxc/'
+
 const rpcGroup = createRpcServer(clientRpc.functions)
 attachWsRpcTransport(rpcGroup, {
   port: rpcPort,
@@ -25,12 +27,11 @@ export const mainCommand = define({
   run: async ({ _ }) => {
     const app = new H3()
 
-    const basePath = '/.devtools-oxc'
     const toFilePath = (id: string) => {
-      const path = id.startsWith(basePath) ? id.slice(basePath.length) || '/' : id
+      const path = id.startsWith(OXC_DEVTOOLS_BASE) ? id.slice(OXC_DEVTOOLS_BASE.length) || '/' : id
       return path === '/' ? 'index.html' : path.replace(/^\//, '')
     }
-    app.use('/.devtools-oxc/**', event => {
+    app.use(OXC_DEVTOOLS_BASE+'**', event => {
       if (event.url.pathname.includes('.devtools.vdt-connection.json')) {
         return {
           backend: 'h3',
@@ -55,7 +56,7 @@ export const mainCommand = define({
     })
     serve(app, { port: appPort, silent: true })
     log.info(
-      `Oxc Inspector UI is running on ${c.cyan(`http://localhost:${appPort}/.devtools-oxc`)}`,
+      `Oxc Inspector UI is running on ${c.cyan(`http://localhost:${appPort}${OXC_DEVTOOLS_BASE}`)}`,
     )
   },
 })
