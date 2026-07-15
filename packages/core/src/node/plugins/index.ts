@@ -63,41 +63,40 @@ export async function DevTools(options: DevToolsOptions = {}): Promise<Plugin[]>
     // eslint-disable-next-line ts/ban-ts-comment
     // @ts-ignore ignore the type error
     plugins.push(await import('@vitejs/devtools-vitest').then(m => m.DevToolsVitestUI()))
-
-    // Terminals, messages, and the inspector are first-party tooling, so they
-    // live in the `~builtin` dock category — alongside the built-in Settings
-    // dock — rather than the `~viteplus` group (which collects integrations
-    // like Rolldown). The hub's own `~terminals` / `~messages` docks are
-    // suppressed via `builtinDocks` in `createDevToolsContext`.
-    //
-    // The hub's built-in `~terminals` / `~messages` docks auto-hid themselves
-    // when empty; the plugin-mounted iframe docks that replaced them carry no
-    // such rule, so we restore it here — the dock is filtered out of the bar
-    // (`when: 'false'`) whenever there are no sessions / messages.
-    const terminalsDevframe = createTerminalsDevframe()
-    plugins.push(createPluginFromDevframe(terminalsDevframe, {
-      dock: { category: '~builtin' },
-      setup(ctx) {
-        hideDockWhenEmpty(ctx, terminalsDevframe.id, () => ctx.terminals.sessions.size === 0)
-      },
-    }))
-    const messagesDevframe = createMessagesDevframe()
-    plugins.push(createPluginFromDevframe(messagesDevframe, {
-      dock: { category: '~builtin' },
-      setup(ctx) {
-        hideDockWhenEmpty(ctx, messagesDevframe.id, () => ctx.messages.entries.size === 0)
-      },
-    }))
-
-    // Meta-introspection ("DevTools for the DevTools"), provided by the
-    // official devframe inspector plugin (replaces the former
-    // `@vitejs/devtools-self-inspect` package). Pinned to a stable id so the
-    // client can gate it behind the `showDevframeInspector` user setting;
-    // hidden by default (opt in via Settings → Advanced).
-    plugins.push(createPluginFromDevframe(createInspectDevframe({ id: DEVTOOLS_INSPECTOR_DOCK_ID }), {
-      dock: { category: '~builtin', icon: 'ph:stethoscope-duotone' },
-    }))
   }
+
+  // Terminals, messages, and the inspector are first-party tooling, so they
+  // live in the `~builtin` dock category — alongside the built-in Settings
+  // dock — rather than the `~viteplus` group (which collects integrations
+  // like Rolldown). The hub's own `~terminals` / `~messages` docks are
+  // suppressed via `builtinDocks` in `createDevToolsContext`.
+  //
+  // The hub's built-in `~messages` docks auto-hid themselves
+  // when empty; the plugin-mounted iframe docks that replaced them carry no
+  // such rule, so we restore it here — the dock is filtered out of the bar
+  // (`when: 'false'`) whenever there are no sessions / messages.
+  const terminalsDevframe = createTerminalsDevframe()
+  const messagesDevframe = createMessagesDevframe()
+  const inspectDevframe = createInspectDevframe({ id: DEVTOOLS_INSPECTOR_DOCK_ID })
+
+  plugins.push(createPluginFromDevframe(terminalsDevframe, {
+    dock: { category: '~builtin' },
+  }))
+  plugins.push(createPluginFromDevframe(messagesDevframe, {
+    dock: { category: '~builtin' },
+    setup(ctx) {
+      hideDockWhenEmpty(ctx, messagesDevframe.id, () => ctx.messages.entries.size === 0)
+    },
+  }))
+
+  // Meta-introspection ("DevTools for the DevTools"), provided by the
+  // official devframe inspector plugin (replaces the former
+  // `@vitejs/devtools-self-inspect` package). Pinned to a stable id so the
+  // client can gate it behind the `showDevframeInspector` user setting;
+  // hidden by default (opt in via Settings → Advanced).
+  plugins.push(createPluginFromDevframe(inspectDevframe, {
+    dock: { category: '~builtin', icon: 'ph:stethoscope-duotone' },
+  }))
 
   return plugins
 }
