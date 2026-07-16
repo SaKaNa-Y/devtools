@@ -60,6 +60,7 @@ export async function createDevToolsContext(
     category: '~builtin',
     title: 'Settings',
     icon: 'ph:gear-duotone',
+    defaultOrder: 1000_000,
   })
 
   const rpcHost = context.rpc as RpcFunctionsHost
