@@ -1,5 +1,6 @@
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
+import { getColorSchemeHeadScript } from '@vitejs/devtools-ui/utils/color-scheme'
 import { defineNuxtConfig } from 'nuxt/config'
 import Inspect from 'vite-plugin-inspect'
 import { alias } from '../../../alias'
@@ -81,6 +82,10 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: `/favicon.svg` },
+      ],
+      script: [
+        // Anti-FOUC: apply the resolved color scheme before first paint.
+        { innerHTML: getColorSchemeHeadScript(), tagPosition: 'head' },
       ],
       htmlAttrs: {
         lang: 'en',
