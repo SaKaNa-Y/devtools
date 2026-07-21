@@ -1,20 +1,34 @@
 <script setup lang="ts">
 import ContainerCard from '@vitejs/devtools-ui/components/Container/ContainerCard.vue'
+import DisplayFileIcon from '@vitejs/devtools-ui/components/Display/DisplayFileIcon.vue'
 import DisplayDuration from '@vitejs/devtools-ui/components/Display/DisplayDuration.vue'
 import OverlayModal from '@vitejs/devtools-ui/components/Overlay/OverlayModal.vue'
-import type { Summary } from '../../../src/types'
+import type { OxcConfigFile, Summary } from '../../../src/types'
 
 interface Props {
   summary: Summary
   totalIssues: number
   version: string
-  config: object | null
+  config: OxcConfigFile[] | Record<string, unknown> | null
   timestamp: number
 }
 
 const props = defineProps<Props>()
 
 const durationMs = computed(() => Math.round(props.summary.start_time * 1000))
+const configFiles = computed<OxcConfigFile[]>(() => {
+  if (Array.isArray(props.config)) return props.config
+  if (!props.config) return []
+  return [
+    {
+      tool: 'oxlint',
+      format: 'json',
+      path: '.oxlintrc.json',
+      content: JSON.stringify(props.config, null, 2),
+      source: 'oxc',
+    },
+  ]
+})
 </script>
 
 <template>
@@ -31,10 +45,8 @@ const durationMs = computed(() => Math.round(props.summary.start_time * 1000))
           target="_blank"
           class="w-fit"
         >
-          <span
-            class="badge-color-gray inline-flex items-center gap-1 px2 py1 rounded border font-mono hover:color-active"
-          >
-            <span class="ml1">v{{ version }}</span>
+          <span class="inline-flex items-center gap-1 font-mono hover:color-active">
+            <span>v{{ version }}</span>
             <div class="i-ph-arrow-up-right" />
           </span>
         </NuxtLink>
@@ -43,37 +55,38 @@ const durationMs = computed(() => Math.round(props.summary.start_time * 1000))
 
         <div class="font-medium">Oxlint Config</div>
 
-        <OverlayModal>
-          <template #trigger="{ open }">
-            <span
-              class="badge-color-gray inline-flex w-fit items-center gap-1 px2 py1 rounded border font-mono cursor-pointer hover:color-active"
-              @click="open"
-            >
-              <span class="ml1">.oxlintrc.json</span>
-              <div class="i-ph-arrow-up-right" />
-            </span>
-          </template>
-          <template #title>
-            <div class="flex items-center gap-1">
-              <div class="i-vscode-icons:file-type-oxlint flex-none" />
-              <div>.oxlintrc.json</div>
+        <div v-if="configFiles.length" class="flex flex-wrap items-center gap-1">
+          <OverlayModal v-for="configFile in configFiles" :key="configFile.path">
+            <template #trigger="{ open }">
+              <button
+                type="button"
+                class="inline-flex max-w-full items-center gap-1 border border-base rounded px2 py1 text-sm font-mono hover:bg-active"
+                :title="`Open ${configFile.path}`"
+                @click="open"
+              >
+                <DisplayFileIcon class="flex-none" :filename="configFile.path" />
+                <span class="truncate">{{ configFile.path }}</span>
+                <div class="i-ph-arrow-up-right flex-none op-fade" />
+              </button>
+            </template>
+            <template #title>
+              <div class="flex items-center gap-1">
+                <DisplayFileIcon class="flex-none" :filename="configFile.path" />
+                <div>{{ configFile.path }}</div>
+              </div>
+            </template>
+            <div class="w-150 max-w-full font-mono">
+              <Shiki :code="configFile.content" :ext="`.${configFile.format}`" />
             </div>
-          </template>
-          <div v-if="config" class="w-150 max-w-full font-mono">
-            <Shiki :code="JSON.stringify(config, null, 2)" ext=".json" />
-          </div>
-          <div v-else>
-            <p class="text-sm op-fade">No config found</p>
-          </div>
-        </OverlayModal>
+          </OverlayModal>
+        </div>
+        <p v-else class="text-sm op-fade">No config found</p>
 
         <div class="i-ph-clock-duotone text-lg" />
 
         <div class="font-medium">Created At</div>
 
-        <span
-          class="badge-color-gray inline-flex w-fit items-center px2 py1 rounded border font-mono"
-        >
+        <span class="inline-flex w-fit items-center font-mono">
           {{ new Date(timestamp).toLocaleString() }}
         </span>
 
@@ -81,9 +94,7 @@ const durationMs = computed(() => Math.round(props.summary.start_time * 1000))
 
         <div class="font-medium">Lint Duration</div>
 
-        <span
-          class="badge-color-gray inline-flex w-fit items-center px2 py1 rounded border font-mono"
-        >
+        <span class="inline-flex w-fit items-center font-mono">
           <DisplayDuration :duration="durationMs" />
         </span>
 
@@ -91,9 +102,7 @@ const durationMs = computed(() => Math.round(props.summary.start_time * 1000))
 
         <div class="font-medium">Checked Files</div>
 
-        <span
-          class="badge-color-gray inline-flex w-fit items-center gap-1 px2 py1 rounded border font-mono"
-        >
+        <span class="inline-flex w-fit items-center gap-1 font-mono">
           {{ summary.number_of_files }} files.
           <span class="text-red-600 dark:text-red-400 font-semibold"
             >{{ summary.files_with_issues }} with issues</span
@@ -104,9 +113,7 @@ const durationMs = computed(() => Math.round(props.summary.start_time * 1000))
 
         <div class="font-medium">Issues</div>
 
-        <span
-          class="badge-color-gray inline-flex w-fit items-center gap-1 px2 py1 rounded border font-mono"
-        >
+        <span class="inline-flex w-fit items-center gap-1 font-mono">
           {{ totalIssues }} issues.
           <span v-if="summary.error_count > 0" class="text-red-600 dark:text-red-400 font-semibold"
             >{{ summary.error_count }} errors</span
