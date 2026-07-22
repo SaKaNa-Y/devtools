@@ -59,15 +59,15 @@ catalogs:
     unrun: ^0.3.1
     vite: ^8.1.5
   deps:
-    '@devframes/hub': ^0.7.5
-    '@devframes/plugin-inspect': ^0.7.5
-    '@devframes/plugin-messages': ^0.7.5
-    '@devframes/plugin-terminals': ^0.7.5
+    '@devframes/hub': ^0.7.6
+    '@devframes/plugin-inspect': ^0.7.6
+    '@devframes/plugin-messages': ^0.7.6
+    '@devframes/plugin-terminals': ^0.7.6
     '@rolldown/debug': ^1.2.0
     actionspack: ^0.1.5
     birpc: ^4.0.0
     cac: ^7.0.0
-    devframe: ^0.7.5
+    devframe: ^0.7.6
     diff: ^9.0.0
     envinfo: ^7.21.0
     get-port-please: ^3.2.0
@@ -78,7 +78,7 @@ catalogs:
     nostics: ^1.2.0
     nypm: ^0.6.8
     obug: ^2.1.4
-    p-limit: ^7.3.0
+    p-limit: ^7.3.1
     pathe: ^2.0.3
     perfect-debounce: ^2.1.0
     tinyexec: ^1.2.4
@@ -90,7 +90,7 @@ catalogs:
     '@antfu/eslint-config': ^9.1.0
     '@nuxt/devtools': ^3.2.4
     '@nuxt/eslint': ^1.16.0
-    '@typescript-eslint/utils': ^8.64.0
+    '@typescript-eslint/utils': ^8.65.0
     '@unocss/eslint-config': ^66.7.5
     '@unocss/preset-web-fonts': ^66.7.5
     axe-core: ^4.12.1
@@ -176,9 +176,9 @@ catalogs:
     langium: ^4.3.1
     semver: ^7.8.5
   storybook:
-    '@storybook/addon-docs': ^10.5.2
-    '@storybook/vue3-vite': ^10.5.2
-    storybook: ^10.5.2
+    '@storybook/addon-docs': ^10.5.3
+    '@storybook/vue3-vite': ^10.5.3
+    storybook: ^10.5.3
   testing:
     playwright-core: ^1.61.1
     tsnapi: ^1.0.0
