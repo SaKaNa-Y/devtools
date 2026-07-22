@@ -171,7 +171,7 @@ export default defineConfig({
             id: 'nuxt',
             type: 'group',
             title: 'Nuxt',
-            icon: 'logos:nuxt-icon',
+            icon: 'vscode-icons:file-type-nuxt',
             category: 'framework',
             defaultChildId: 'nuxt:overview',
           })
@@ -180,7 +180,6 @@ export default defineConfig({
             type: 'group',
             title: 'Playground',
             icon: 'ph:flask-duotone',
-            category: 'framework',
           })
           const nuxtFeatures = [
             ['nuxt:overview', 'Overview', 'ph:gauge-duotone'],

@@ -130,7 +130,7 @@ export async function DevToolsBuiltin(options: {
 
         // Terminals, messages, and the inspector are first-party tooling, so they
         // live in the `~builtin` dock category — alongside the built-in Settings
-        // dock — rather than the `~viteplus` group (which collects integrations
+        // dock — rather than the `viteplus` group (which collects integrations
         // like Rolldown). The hub synthesizes no docks of its own; these
         // plugin-mounted iframe docks are the terminals / messages tabs.
         //

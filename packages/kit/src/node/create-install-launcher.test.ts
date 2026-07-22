@@ -45,7 +45,7 @@ const baseOptions = {
   id: 'rolldown',
   title: 'Rolldown',
   icon: '/__devtools-assets/rolldown.svg',
-  groupId: '~viteplus',
+  groupId: 'viteplus',
   label: 'Rolldown DevTools',
   install: ['@vitejs/devtools-rolldown@^0.4.1'],
 }
@@ -62,7 +62,7 @@ describe('createInstallLauncher', () => {
 
     const dock = registered.get('rolldown')!
     expect(dock.type).toBe('launcher')
-    expect(dock.groupId).toBe('~viteplus')
+    expect(dock.groupId).toBe('viteplus')
     expect(dock.launcher.status).toBe('idle')
     expect(dock.launcher.buttonStart).toBe('Install Rolldown DevTools')
     // The launch action is the bound command (the serializable path); no
