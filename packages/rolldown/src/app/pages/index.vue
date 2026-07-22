@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { BuildInfo } from '~~/node/rolldown/logs-manager'
+import ActionButton from '@vitejs/devtools-ui/components/Action/ActionButton.vue'
+import ActionIconButton from '@vitejs/devtools-ui/components/Action/ActionIconButton.vue'
 import BannerRolldownDevTools from '@vitejs/devtools-ui/components/Banner/BannerRolldownDevTools.vue'
-import DisplayIconButton from '@vitejs/devtools-ui/components/Display/DisplayIconButton.vue'
 import { useClipboard } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { useRpc } from '#imports'
@@ -45,7 +46,10 @@ const normalizedSelectedSessions = computed(() => {
 })
 
 const rpc = useRpc()
-const sessions = await rpc.value.call('vite:rolldown:list-sessions')
+const sessions = ref<BuildInfo[]>(await rpc.value.call('vite:rolldown:list-sessions'))
+
+// Drives the confirm → run → result modal (see RunBuildDialog).
+const runBuildOpen = ref(false)
 
 function selectSession(session: BuildInfo) {
   if (selectedSessionIds.value.includes(session.id)) {
@@ -67,15 +71,27 @@ function selectSession(session: BuildInfo) {
       <p class="m0 op50 text-center">
         No sessions yet.
         <br>
-        Enable devtools output in your Rolldown config, then run a build:
+        Run a build with devtools output enabled to get started:
+      </p>
+      <ActionButton
+        variant="primary"
+        icon="i-ph-play-duotone"
+        title="Run a build with devtools output"
+        @click="runBuildOpen = true"
+      >
+        Run build with devtools
+      </ActionButton>
+      <p class="m0 op40 text-sm text-center">
+        Or enable it manually in your Rolldown config:
       </p>
       <div class="relative w-full">
         <pre class="m0 p3 pr10 rounded-lg border border-base bg-code font-mono text-sm of-auto text-left"><code>{{ ENABLE_DEVTOOLS_SNIPPET }}</code></pre>
-        <DisplayIconButton
-          class="absolute" top2 right2
-          title="Copy snippet"
-          class-icon="i-ph-copy-duotone"
+        <ActionIconButton
+          class="absolute top2 right2"
+          icon="i-ph-copy-duotone"
+          :tooltip="copied ? 'Copied!' : 'Copy snippet'"
           :active="copied"
+          active-class="text-green bg-active op100"
           @click="copy()"
         />
       </div>
@@ -92,12 +108,19 @@ function selectSession(session: BuildInfo) {
         @select="selectSession"
       />
     </div>
-    <div v-if="sessions.length" class="fixed top-5 right-5 flex flex-col gap2">
+    <div v-if="sessions.length" class="fixed top-5 right-5 flex flex-col gap2 items-end">
       <div class="flex flex-row justify-around w20 h8 border border-base rounded-8 of-hidden">
         <button v-for="mode in modeList" :key="mode.value" :title="mode.label" class="flex-1 op50 flex items-center justify-center hover:bg-active hover:text-base hover:op100!" :class="{ 'bg-active text-base op100!': sessionMode === mode.value }" @click="sessionMode = mode.value">
           <span :class="mode.icon" class="text-sm" />
         </button>
       </div>
+      <ActionButton
+        icon="i-ph-play-duotone"
+        title="Run a build with devtools output"
+        @click="runBuildOpen = true"
+      >
+        Run build
+      </ActionButton>
     </div>
     <div v-if="selectedSessions.length > 0 && sessionMode === 'compare'" class="fixed bottom-5 right-5 border border-base rounded-2 w100 max-lg:w85 bg-glass z-panel-content">
       <CompareSessionMeta :sessions="normalizedSelectedSessions" class="flex-col gap0 [&>div]:border-none! [&>first-child]:border-b!" />
@@ -110,5 +133,6 @@ function selectSession(session: BuildInfo) {
         </div>
       </div>
     </div>
+    <RunBuildDialog v-model:open="runBuildOpen" @refresh="sessions = $event" />
   </div>
 </template>
