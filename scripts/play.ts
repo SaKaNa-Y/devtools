@@ -11,7 +11,7 @@ import prompts from 'prompts'
  * new package, example, or other playground shows up here for free, with no
  * change to this script.
  */
-const WORKSPACE_PATTERNS = ['packages/*', 'examples/*', 'docs', 'e2e', 'storybook']
+const WORKSPACE_PATTERNS = ['packages/*', 'examples/*', 'storybook']
 
 /**
  * Script names that make a workspace package runnable as a "play" — the
@@ -19,7 +19,7 @@ const WORKSPACE_PATTERNS = ['packages/*', 'examples/*', 'docs', 'e2e', 'storyboo
  * the examples/core convention, `dev` covers the Nuxt UI packages, `docs`
  * and `start` round out the rest.
  */
-const RUN_SCRIPTS = ['play:dev', 'play', 'dev', 'docs', 'start']
+const RUN_SCRIPTS = ['play:dev', 'play', 'dev', 'storybook']
 
 const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 
