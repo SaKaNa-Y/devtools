@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { defineComponent, h, onMounted, ref, shallowRef } from 'vue'
 import FloatingPopover from './FloatingPopover'
 
+// @unocss-include
+
 /**
  * A story harness: render an anchor element, then feed its DOM node to the
  * popover on mount (the real component positions against a live element).
@@ -54,4 +56,40 @@ export const MenuContent: Story = {
     ...['Overview', 'Pages', 'Components'].map(label =>
       h('button', { class: 'px2 py1.5 rounded text-sm text-left op80 hover:op100 hover:bg-active transition' }, label)),
   ]), 'Reveal menu'),
+}
+
+export const CornerAnchors: Story = {
+  render: () => defineComponent({
+    setup() {
+      const corners = [
+        { label: 'Top left', class: 'left-2 top-2' },
+        { label: 'Top right', class: 'right-2 top-2' },
+        { label: 'Bottom left', class: 'left-2 bottom-2' },
+        { label: 'Bottom right', class: 'right-2 bottom-2' },
+      ].map(corner => ({
+        ...corner,
+        el: null as HTMLElement | null,
+        item: shallowRef<any>(null),
+      }))
+      const menu = () => h('div', { class: 'flex flex-col gap-0.5 min-w-40' }, [
+        h('div', { class: 'px2 pt1 pb1.5 op60 text-2.75 uppercase tracking-wide font-medium' }, 'Menu'),
+        ...['Overview', 'Pages', 'Components'].map(label =>
+          h('button', { class: 'px2 py1.5 rounded text-sm text-left op80 hover:op100 hover:bg-active transition' }, label)),
+      ])
+      onMounted(() => {
+        for (const corner of corners) {
+          if (corner.el)
+            corner.item.value = { el: corner.el, content: menu }
+        }
+      })
+      return () => h('div', { class: 'min-h-100 font-sans' }, corners.flatMap(corner => [
+        h('button', {
+          key: corner.label,
+          ref: (el: any) => (corner.el = el),
+          class: `fixed ${corner.class} px3 py1.5 rounded border border-base bg-glass color-base shadow`,
+        }, corner.label),
+        h(FloatingPopover, { item: corner.item.value, dismissOnClickOutside: false }),
+      ]))
+    },
+  }),
 }
