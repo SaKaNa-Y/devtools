@@ -23,6 +23,7 @@ packages:
   - docs
   - e2e
   - storybook
+
 overrides:
   '@jridgewell/sourcemap-codec': 'catalog:resolutions'
   '@nuxt/devtools': 'catalog:devtools'
@@ -40,10 +41,11 @@ overrides:
   twoslash: 'catalog:docs'
   vite: 'catalog:build'
 
-vars:
+refs:
   devframe: &devframe ^0.7.12
   nuxt: &nuxt ^4.5.0
   shiki: &shiki ^4.3.1
+  storybook: &storybook ^10.5.3
   unocss: &unocss ^66.7.5
   vueuse: &vueuse ^14.3.0
 
@@ -188,9 +190,9 @@ catalogs:
     langium: ^4.3.1
     semver: ^7.8.5
   storybook:
-    '@storybook/addon-docs': ^10.5.3
-    '@storybook/vue3-vite': ^10.5.3
-    storybook: ^10.5.3
+    '@storybook/addon-docs': *storybook
+    '@storybook/vue3-vite': *storybook
+    storybook: *storybook
   testing:
     playwright-core: ^1.61.1
     tsnapi: ^1.2.0
